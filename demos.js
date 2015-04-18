@@ -130,7 +130,7 @@ exports.mobbattle = function(mobSize) {
 	var location = self.getLocation();
 	skeletons = []; //reset monsters
 
-	sb.removeScoreObjective('mob-battle');
+	sb.removeScoreObjective('battle');
 	location.x = location.x + 10;
 
 	for (var i = 0; i < _mobSize; i++) {
@@ -139,7 +139,7 @@ exports.mobbattle = function(mobSize) {
 		entity.spawn();
 		skeletons.push(entity.getID());
 	}
-	sbObjective = sb.addScoreObjective('mob-battle');
+	sbObjective = sb.addScoreObjective('battle');
 	sbObjective.setDisplayName('mob battle');
 	sb.setScoreboardPosition(Packages.net.canarymod.api.scoreboard.ScorePosition.SIDEBAR, sbObjective)
 
@@ -147,25 +147,33 @@ exports.mobbattle = function(mobSize) {
 }
 
 events.entityDeath( function( evt, cancel) { 
+	//remove from tracking array
 	var index = skeletons.indexOf(evt.entity.getID());
-	var player = evt.damageSource.getDamageDealer();
-	if (!player || !player.name) {
-		return;
-	}
-        sbObjective = sb.getScoreObjective("mob-battle");
-	var score = sb.getScore(player, sbObjective);
-        score.addToScore(1);
-        score.update();
-
 	if (index >= 0) {
-		echo('got one');
 		skeletons.splice(index,1);
 	}
 
+	//who did damage
+	var damageSource = evt.damageSource;
+	var player = evt.damageSource.getDamageDealer();
+	if (damageSource.isProjectile()) {
+		player = player.getOwner();
+	}
+
+	if (!player || !player.name) {
+		return;
+	}
+
+	//update scoreboard
+        sbObjective = sb.getScoreObjective("battle");
+	var score = sb.getScore(player.name, sbObjective);
+        score.addToScore(1);
+        score.update();
+
+	//is game over?
 	if (gameover == false && skeletons.length <= 0) {
 		gameover = true;
 		var players = utils.players();
-		echo(players);
 		utils.foreach (players, function( player ) { 
 		  echo( player , 'mob battle is over');
 		});
