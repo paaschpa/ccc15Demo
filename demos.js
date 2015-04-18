@@ -122,7 +122,6 @@ var Canary = Packages.net.canarymod.Canary;
 var skeletons = [];
 var sb = Canary.scoreboards().getScoreboard();
 var sbObjective = {};
-var gameover = true;
 exports.mobbattle = function(mobSize) {
 	var _mobSize = mobSize || 1;
 	var entityType = Packages.net.canarymod.api.entity.EntityType;
@@ -142,38 +141,38 @@ exports.mobbattle = function(mobSize) {
 	sbObjective = sb.addScoreObjective('battle');
 	sbObjective.setDisplayName('mob battle');
 	sb.setScoreboardPosition(Packages.net.canarymod.api.scoreboard.ScorePosition.SIDEBAR, sbObjective)
-
-	gameover = false;
 }
 
 events.entityDeath( function( evt, cancel) { 
 	//remove from tracking array
 	var index = skeletons.indexOf(evt.entity.getID());
+	var players = utils.players();
+	utils.foreach (players, function(player) {
+		echo(player, 'skeletons left ' + skeletons.length);
+	});
 	if (index >= 0) {
 		skeletons.splice(index,1);
-	}
 
-	//who did damage
-	var damageSource = evt.damageSource;
-	var player = evt.damageSource.getDamageDealer();
-	if (damageSource.isProjectile()) {
-		player = player.getOwner();
-	}
+		//who did damage
+		var damageSource = evt.damageSource;
+		var player = evt.damageSource.getDamageDealer();
+		if (damageSource.isProjectile()) {
+			player = player.getOwner();
+		}
 
-	if (!player || !player.name) {
-		return;
-	}
+		if (!player || !player.name) {
+			return;
+		}
 
-	//update scoreboard
-        sbObjective = sb.getScoreObjective("battle");
-	var score = sb.getScore(player.name, sbObjective);
-        score.addToScore(1);
-        score.update();
+		//update scoreboard
+		sbObjective = sb.getScoreObjective("battle");
+		var score = sb.getScore(player.name, sbObjective);
+		score.addToScore(1);
+		score.update();
+	}
 
 	//is game over?
-	if (gameover == false && skeletons.length <= 0) {
-		gameover = true;
-		var players = utils.players();
+	if (skeletons.length <= 0) {
 		utils.foreach (players, function( player ) { 
 		  echo( player , 'mob battle is over');
 		});
