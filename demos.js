@@ -149,7 +149,7 @@ exports.mobbattle = function(mobSize) {
 events.entityDeath( function( evt, cancel) { 
 	var index = skeletons.indexOf(evt.entity.getID());
 	var player = evt.damageSource.getDamageDealer();
-	if (!player && !player.name) {
+	if (!player || !player.name) {
 		return;
 	}
         sbObjective = sb.getScoreObjective("mob-battle");
