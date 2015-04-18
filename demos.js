@@ -1,6 +1,6 @@
 //self, player.getCardinalDirection()
 //SOUTH 0, WEST 1, NORTH 2, EAST 3
-
+var utils = require('utils');
 var directions = {
 	'N': {'Id': 0, 'OppositeId': 2}, 
 	'S': {'Id': 2, 'OppositeId': 0}, 
@@ -117,6 +117,60 @@ exports.pumpkinbox = function(size, times, direction) {
 		box(j,size).right(size).box(j,1,size).up(size).left(size).box(j,size + 1).down(size).box(j,1,size);
 	}
 }
+
+var Canary = Packages.net.canarymod.Canary;
+var skeletons = [];
+var sb = Canary.scoreboards().getScoreboard();
+var sbObjective = {};
+var gameover = true;
+exports.mobbattle = function(mobSize) {
+	var _mobSize = mobSize || 1;
+	var entityType = Packages.net.canarymod.api.entity.EntityType;
+	var helmet = Canary.factory().itemFactory.newItem(310);
+	var location = self.getLocation();
+	skeletons = []; //reset monsters
+
+	sb.removeScoreObjective('mob-battle');
+	location.x = location.x + 10;
+
+	for (var i = 0; i < _mobSize; i++) {
+		var entity = Canary.factory().entityFactory.newEntity(entityType['WITHERSKELETON'], location);
+		entity.setEquipment(helmet,4);
+		entity.spawn();
+		skeletons.push(entity.getID());
+	}
+	sbObjective = sb.addScoreObjective('mob-battle');
+	sbObjective.setDisplayName('mob battle');
+	sb.setScoreboardPosition(Packages.net.canarymod.api.scoreboard.ScorePosition.SIDEBAR, sbObjective)
+
+	gameover = false;
+}
+
+events.entityDeath( function( evt, cancel) { 
+	var index = skeletons.indexOf(evt.entity.getID());
+	var player = evt.damageSource.getDamageDealer();
+	if (!player && !player.name) {
+		return;
+	}
+        sbObjective = sb.getScoreObjective("mob-battle");
+	var score = sb.getScore(player, sbObjective);
+        score.addToScore(1);
+        score.update();
+
+	if (index >= 0) {
+		echo('got one');
+		skeletons.splice(index,1);
+	}
+
+	if (gameover == false && skeletons.length <= 0) {
+		gameover = true;
+		var players = utils.players();
+		echo(players);
+		utils.foreach (players, function( player ) { 
+		  echo( player , 'mob battle is over');
+		});
+	}
+} );
 
 var _myLine = 'myLine'; 
 exports.lineStart = function() {

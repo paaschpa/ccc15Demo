@@ -1,0 +1,66 @@
++Welcome
+++Make sure screens are visible
+++gvim > set guifont=*
+++terminal > properties > fon
+++vimgrep /pattern/j **\*.js
+
++About
+
++Not About
+++Not modding via Java
+++No Minecraft Coder Pack
+
++Agenda
+++sort of inception like...writing a mod within a mod on a mod server
+++writing JavaScript mods using Java Libraries within a Java mod
+++jumping around server console window, game, and code
+++get some definitions upfront which hopefully make sense later
+
++Minecraft mods
+++Confusing/not supported by Minecraft/Mojang
+++Modloaders Forge, Modloader, ModPacks, etc 
+++Brandon's favorite mods and what they do
+++ScriptCraft is a Minecraft Server Plugin 
+
++CanaryMod
+++not a modded client
+++bukkit DMCA take down
+++spigot
+++run locally and in the wild
+
++ScriptCraft
+++No graphics
+++Access to CanaryMod/Bukkit Server Apis
+++Do alot Drone, mini-games, spawn, etc
+
++Origin Story
+++Why did Brandon want to play
+++Now that you've played what are your favorite things, dislikes, things every
+player wants to get, what is your favorite mode?
+
+++recreate first time playing survival mode...dead in 10 minutes.
+++cheating - demo cheats
+++give Dadoid35 diamond_sword 
+++time set day
+++enchant Dadoid35 16 5???
+
++++
++++/js blocktype("Hello World",blocks.glowstone)
++++time set 17000
++++/js self.getCapabilities().mayFly()
++++/js self.getCapabilities().setMayFly(true)
++++/js self.updateCapabilities()
+
+box(type, width, height, depth)
++++/js box0(1,4,1,10) //0
++++/js for(var i=0;i<10;i++){echo(1);}
++++/js for(var(i=0;i<20;i++){up(i).box(i,1);}
++++/js for(var(i=0;i<20;i++){right(i).box(1,1,10);}
+
+
+
++++/js load('nashorn:mozilla_compat.js')
++++/js importPackage(java.awt);
++++/js var pane = new java.awt.Frame('hi');
++++/js pane.setVisible(true);
+
