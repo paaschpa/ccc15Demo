@@ -1,0 +1,38 @@
+Files and notes from Chicago Code Camp 2015 talk
+
+CanaryMod-1.7.10-1.1.3.jar 
+- This is the minecraft server
+- start it using java -jar -Xmx1024 CanaryMod-1.7.10-1.1.3.jar -o
+- running the first time will create a new folders/files
+- find eula.txt and change false to true. Start server again
+
+scriptcraft.jar
+- this is the plugin for CanaryMod server.
+- after starting the server, place it in the plugins directory
+- restart the server using command above
+
+If everything is working you should be able to enter 1+1 in the Server console and see "2".
+
+Start your Minecraft game
+- The files in this repo are for version 1.7.10
+- To change your profile select 'Edit Profile' on the 'News Page' of the game (before you hit 'Play') and select 1.7.10 and 'Save Profile'
+- To use the /js command you must be an 'OP'. On the server console type op <your playername> or add your player name in the /config/ops.cfg
+
+Try some commands
+time set 17000 
+/js blocktype("Hello World",blocks.glowstone)
+/js self.getCapabilities().mayFly()
+/js self.getCapabilities().setMayFly(true)
+/js self.updateCapabilities()
+
+/js box0(1,4,1,10) //0
+/js for(var i=0;i<10;i++){echo(1);}
+/js for(var(i=0;i<20;i++){up(i).box(i,1);}
+/js for(var(i=0;i<20;i++){right(i).box(1,1,10);}
+
+Example of using the Java library from the game.
+This should pop a window on machine running the server
+/js load('nashorn:mozilla_compat.js')
+/js importPackage(java.awt);
+/js var pane = new java.awt.Frame('hi');
+/js pane.setVisible(true);

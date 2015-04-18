@@ -122,6 +122,7 @@ var Canary = Packages.net.canarymod.Canary;
 var skeletons = [];
 var sb = Canary.scoreboards().getScoreboard();
 var sbObjective = {};
+var gameOver = true;
 exports.mobbattle = function(mobSize) {
 	var _mobSize = mobSize || 1;
 	var entityType = Packages.net.canarymod.api.entity.EntityType;
@@ -140,16 +141,15 @@ exports.mobbattle = function(mobSize) {
 	}
 	sbObjective = sb.addScoreObjective('battle');
 	sbObjective.setDisplayName('mob battle');
-	sb.setScoreboardPosition(Packages.net.canarymod.api.scoreboard.ScorePosition.SIDEBAR, sbObjective)
+	sb.setScoreboardPosition(Packages.net.canarymod.api.scoreboard.ScorePosition.SIDEBAR, sbObjective);
+	gameOver = false;
 }
 
 events.entityDeath( function( evt, cancel) { 
 	//remove from tracking array
 	var index = skeletons.indexOf(evt.entity.getID());
 	var players = utils.players();
-	utils.foreach (players, function(player) {
-		echo(player, 'skeletons left ' + skeletons.length);
-	});
+
 	if (index >= 0) {
 		skeletons.splice(index,1);
 
@@ -172,10 +172,11 @@ events.entityDeath( function( evt, cancel) {
 	}
 
 	//is game over?
-	if (skeletons.length <= 0) {
+	if (skeletons.length <= 0 && !gameOver) {
 		utils.foreach (players, function( player ) { 
 		  echo( player , 'mob battle is over');
 		});
+		gameOver = true;
 	}
 } );
 
