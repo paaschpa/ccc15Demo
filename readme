@@ -16,7 +16,19 @@ If everything is working you should be able to enter 1+1 in the Server console a
 Start your Minecraft game
 - The files in this repo are for version 1.7.10
 - To change your profile select 'Edit Profile' on the 'News Page' of the game (before you hit 'Play') and select 1.7.10 and 'Save Profile'
+- Hit 'Play' and choose 'Multiplayer'
+- In the 'Multiplayer' window choose 'Direct Connect'
+- If you are playing on the same machine running the server enter 'localhost'
+- See below if you are playing the game not from the machine running the server
 - To use the /js command you must be an 'OP'. On the server console type op <your playername> or add your player name in the /config/ops.cfg
+
+Have another player join (not covered in talk because of network issues)
+- Get the ip address of the machine running the CanaryMod server
+- Make sure profile is '1.7.10'
+- Choose 'Multiplayer' and 'Direct Connect'
+- enter the <server ip address>:25565 (ie. 192.168.1.78:25565)
+- 25565 is the default port for CanaryMod and can be changed in the /config/server.cfg file
+- On the server console or from an already OP'd player op <new players name> 
 
 Try some commands
 time set 17000 
